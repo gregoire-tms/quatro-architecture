@@ -1,0 +1,108 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/theme.json",
+    "version": 3,
+    "settings": {
+        "appearanceTools": true,
+        "layout": {
+            "contentSize": "760px",
+            "wideSize": "1440px"
+        },
+        "color": {
+            "custom": false,
+            "customGradient": false,
+            "defaultDuotone": false,
+            "defaultGradients": false,
+            "defaultPalette": false,
+            "palette": [
+                {
+                    "slug": "black",
+                    "name": "Noir",
+                    "color": "#151515"
+                },
+                {
+                    "slug": "white",
+                    "name": "Blanc",
+                    "color": "#ffffff"
+                },
+                {
+                    "slug": "grey",
+                    "name": "Gris",
+                    "color": "#6d6d6d"
+                },
+                {
+                    "slug": "light-grey",
+                    "name": "Gris clair",
+                    "color": "#f3f3f0"
+                }
+            ]
+        },
+        "spacing": {
+            "blockGap": true,
+            "units": [
+                "px",
+                "rem",
+                "%",
+                "vw"
+            ]
+        },
+        "typography": {
+            "fluid": true,
+            "customFontSize": false,
+            "fontFamilies": [
+                {
+                    "slug": "sans",
+                    "name": "Sans système",
+                    "fontFamily": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Helvetica, Arial, sans-serif"
+                }
+            ],
+            "fontSizes": [
+                {
+                    "slug": "small",
+                    "name": "Petit",
+                    "size": "0.875rem"
+                },
+                {
+                    "slug": "normal",
+                    "name": "Normal",
+                    "size": "1rem"
+                },
+                {
+                    "slug": "large",
+                    "name": "Grand",
+                    "size": "1.5rem"
+                }
+            ]
+        }
+    },
+    "styles": {
+        "color": {
+            "background": "var(--wp--preset--color--white)",
+            "text": "var(--wp--preset--color--black)"
+        },
+        "spacing": {
+            "blockGap": "1.5rem"
+        },
+        "typography": {
+            "fontFamily": "var(--wp--preset--font-family--sans)",
+            "fontSize": "var(--wp--preset--font-size--normal)",
+            "fontWeight": "400",
+            "lineHeight": "1.6"
+        },
+        "elements": {
+            "heading": {
+                "typography": {
+                    "fontWeight": "500",
+                    "lineHeight": "1.1"
+                }
+            },
+            "link": {
+                "color": {
+                    "text": "var(--wp--preset--color--black)"
+                },
+                "typography": {
+                    "textDecoration": "none"
+                }
+            }
+        }
+    }
+}
