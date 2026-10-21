@@ -69,3 +69,128 @@ function quatro_enqueue_assets(): void
     );
 }
 add_action('wp_enqueue_scripts', 'quatro_enqueue_assets');
+
+/**
+ * Récupère et nettoie une valeur envoyée dans l’URL.
+ */
+function quatro_get_archive_filter(string $key): string
+{
+    if (
+        !isset($_GET[$key]) ||
+        !is_string($_GET[$key])
+    ) {
+        return '';
+    }
+
+    return sanitize_text_field(
+        wp_unslash($_GET[$key])
+    );
+}
+
+/**
+ * Filtres de l’archive des réalisations.
+ */
+function quatro_filter_realisation_archive(
+    WP_Query $query
+): void {
+    if (
+        is_admin() ||
+        !$query->is_main_query() ||
+        !$query->is_post_type_archive('realisation')
+    ) {
+        return;
+    }
+
+    /*
+     * 18 projets = 6 lignes de 3 projets sur ordinateur.
+     */
+    $query->set('posts_per_page', 18);
+
+    /*
+     * L’ordre manuel sera prioritaire.
+     * À ordre égal, les projets les plus récents apparaîtront en premier.
+     */
+    $query->set('orderby', [
+        'menu_order' => 'ASC',
+        'date'       => 'DESC',
+    ]);
+
+    $search = quatro_get_archive_filter('recherche');
+
+    if ($search !== '') {
+        $query->set('s', $search);
+    }
+
+    /*
+     * Filtres par taxonomies.
+     */
+    $typology = sanitize_title(
+        quatro_get_archive_filter('filtre_typologie')
+    );
+
+    $speciality = sanitize_title(
+        quatro_get_archive_filter('filtre_specialite')
+    );
+
+    $tax_query = [];
+
+    if ($typology !== '') {
+        $tax_query[] = [
+            'taxonomy' => 'typologie',
+            'field'    => 'slug',
+            'terms'    => $typology,
+        ];
+    }
+
+    if ($speciality !== '') {
+        $tax_query[] = [
+            'taxonomy' => 'specialite',
+            'field'    => 'slug',
+            'terms'    => $speciality,
+        ];
+    }
+
+    if (!empty($tax_query)) {
+        $query->set(
+            'tax_query',
+            array_merge(
+                ['relation' => 'AND'],
+                $tax_query
+            )
+        );
+    }
+
+    /*
+     * Filtre par statut.
+     */
+    $status = sanitize_key(
+        quatro_get_archive_filter('filtre_statut')
+    );
+
+    $allowed_statuses = [
+        'concours',
+        'etude',
+        'chantier',
+        'livre',
+    ];
+
+    if (in_array($status, $allowed_statuses, true)) {
+        $meta_query = $query->get('meta_query');
+
+        if (!is_array($meta_query)) {
+            $meta_query = [];
+        }
+
+        $meta_query[] = [
+            'key'     => '_quatro_status',
+            'value'   => $status,
+            'compare' => '=',
+        ];
+
+        $query->set('meta_query', $meta_query);
+    }
+}
+add_action(
+    'pre_get_posts',
+    'quatro_filter_realisation_archive'
+);
