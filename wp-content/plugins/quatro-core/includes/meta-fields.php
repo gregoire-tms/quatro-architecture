@@ -60,6 +60,13 @@ function quatro_get_realisation_meta_fields(): array
             'type'        => 'text',
             'placeholder' => 'Exemple : Jean Dupont',
         ],
+        '_quatro_featured' => [
+            'label'          => 'Mise en avant',
+            'type'           => 'checkbox',
+            'checkbox_label' => 'Afficher cette réalisation sur la page d’accueil',
+            'description'    => 'Sélectionnez idéalement 3 ou 6 projets.',
+            'wide'           => true,
+        ],
         '_quatro_old_url' => [
             'label'       => 'Ancienne URL',
             'type'        => 'url',
@@ -146,7 +153,7 @@ function quatro_render_realisation_meta_box(WP_Post $post): void
         'quatro_realisation_meta_nonce'
     );
 
-    ?>
+?>
     <style>
         .quatro-fields {
             display: grid;
@@ -198,27 +205,39 @@ function quatro_render_realisation_meta_box(WP_Post $post): void
                     <?php echo esc_html($field['label']); ?>
                 </label>
 
-                <?php if ($field['type'] === 'textarea') : ?>
+                <?php if ($field['type'] === 'checkbox') : ?>
+
+                    <input
+                        type="checkbox"
+                        id="<?php echo esc_attr($input_id); ?>"
+                        name="quatro_meta[<?php echo esc_attr($meta_key); ?>]"
+                        value="1"
+                        <?php checked($value, '1'); ?>>
+
+                    <span>
+                        <?php echo esc_html(
+                            $field['checkbox_label']
+                        ); ?>
+                    </span>
+
+                <?php elseif ($field['type'] === 'textarea') : ?>
 
                     <textarea
                         class="widefat"
                         id="<?php echo esc_attr($input_id); ?>"
                         name="quatro_meta[<?php echo esc_attr($meta_key); ?>]"
-                        placeholder="<?php echo esc_attr($field['placeholder'] ?? ''); ?>"
-                    ><?php echo esc_textarea($value); ?></textarea>
+                        placeholder="<?php echo esc_attr($field['placeholder'] ?? ''); ?>"><?php echo esc_textarea($value); ?></textarea>
 
                 <?php elseif ($field['type'] === 'select') : ?>
 
                     <select
                         class="widefat"
                         id="<?php echo esc_attr($input_id); ?>"
-                        name="quatro_meta[<?php echo esc_attr($meta_key); ?>]"
-                    >
+                        name="quatro_meta[<?php echo esc_attr($meta_key); ?>]">
                         <?php foreach ($field['options'] as $option_value => $option_label) : ?>
                             <option
                                 value="<?php echo esc_attr($option_value); ?>"
-                                <?php selected($value, $option_value); ?>
-                            >
+                                <?php selected($value, $option_value); ?>>
                                 <?php echo esc_html($option_label); ?>
                             </option>
                         <?php endforeach; ?>
@@ -232,8 +251,7 @@ function quatro_render_realisation_meta_box(WP_Post $post): void
                         id="<?php echo esc_attr($input_id); ?>"
                         name="quatro_meta[<?php echo esc_attr($meta_key); ?>]"
                         value="<?php echo esc_attr($value); ?>"
-                        placeholder="<?php echo esc_attr($field['placeholder'] ?? ''); ?>"
-                    >
+                        placeholder="<?php echo esc_attr($field['placeholder'] ?? ''); ?>">
 
                 <?php endif; ?>
 
@@ -245,7 +263,7 @@ function quatro_render_realisation_meta_box(WP_Post $post): void
             </div>
         <?php endforeach; ?>
     </div>
-    <?php
+<?php
 }
 
 /**

@@ -704,3 +704,319 @@ select:focus-visible {
         transition: none;
     }
 }
+
+/* Page d’accueil */
+
+.home-hero {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: clamp(560px, 78vh, 900px);
+    overflow: hidden;
+    color: var(--quatro-white);
+    background: var(--quatro-black);
+}
+
+.home-hero__media,
+.home-hero__overlay {
+    position: absolute;
+    inset: 0;
+}
+
+.home-hero__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.home-hero__placeholder {
+    width: 100%;
+    height: 100%;
+    background:
+        linear-gradient(
+            135deg,
+            #555,
+            #161616
+        );
+}
+
+.home-hero__overlay {
+    background:
+        linear-gradient(
+            to top,
+            rgb(0 0 0 / 65%) 0%,
+            rgb(0 0 0 / 10%) 65%,
+            rgb(0 0 0 / 5%) 100%
+        );
+}
+
+.home-hero__content {
+    position: relative;
+    z-index: 1;
+    padding-block: 56px;
+}
+
+.home-hero__title {
+    max-width: 1200px;
+    margin: 0;
+    font-size: clamp(3rem, 8vw, 8rem);
+    font-weight: 500;
+    letter-spacing: -0.06em;
+    line-height: 0.9;
+}
+
+.home-hero__description {
+    max-width: 600px;
+    margin: 28px 0 0;
+    font-size: clamp(1rem, 2vw, 1.35rem);
+}
+
+/* Titres de section */
+
+.home-section-eyebrow {
+    margin: 0 0 16px;
+    color: var(--quatro-grey);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.home-section-heading h2,
+.home-section-header h2 {
+    margin: 0;
+    font-size: clamp(2.2rem, 5vw, 5rem);
+    font-weight: 500;
+    letter-spacing: -0.045em;
+    line-height: 0.95;
+}
+
+.home-section-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 40px;
+    margin-bottom: 48px;
+}
+
+.text-link {
+    display: inline-block;
+    font-size: 0.875rem;
+    text-decoration: underline;
+    text-underline-offset: 5px;
+}
+
+/* Présentation */
+
+.home-introduction {
+    display: grid;
+    grid-template-columns: minmax(200px, 0.8fr) minmax(0, 1.8fr);
+    gap: clamp(60px, 10vw, 180px);
+    padding-block: clamp(90px, 12vw, 180px);
+}
+
+.home-introduction__content {
+    max-width: 850px;
+    font-size: clamp(1.4rem, 2.6vw, 2.4rem);
+    letter-spacing: -0.025em;
+    line-height: 1.35;
+}
+
+.home-introduction__content > *:first-child {
+    margin-top: 0;
+}
+
+.home-introduction__content > *:last-child {
+    margin-bottom: 0;
+}
+
+.home-introduction__main .text-link {
+    margin-top: 40px;
+}
+
+/* Projets sélectionnés */
+
+.home-projects {
+    padding-block: clamp(80px, 10vw, 150px);
+    background: var(--quatro-light-grey);
+}
+
+.home-projects .project-card__image {
+    background: var(--quatro-white);
+}
+
+/* Expertises */
+
+.home-expertises {
+    color: var(--quatro-white);
+    background: var(--quatro-black);
+}
+
+.home-expertises__inner {
+    display: grid;
+    grid-template-columns: minmax(200px, 0.8fr) minmax(0, 1.8fr);
+    gap: clamp(60px, 10vw, 180px);
+    padding-block: clamp(90px, 12vw, 170px);
+}
+
+.home-expertises .home-section-eyebrow {
+    color: #a0a0a0;
+}
+
+.home-expertises .home-section-heading h2 {
+    color: var(--quatro-white);
+}
+
+.home-expertises__list {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    border-top: 1px solid rgb(255 255 255 / 30%);
+}
+
+.home-expertises__list li {
+    border-bottom: 1px solid rgb(255 255 255 / 30%);
+}
+
+.home-expertises__list a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding-block: 24px;
+    font-size: clamp(1.35rem, 2.5vw, 2.2rem);
+}
+
+.home-expertises__list a:hover {
+    padding-left: 10px;
+    opacity: 1;
+}
+
+/* Actualités */
+
+.home-news {
+    padding-block: clamp(90px, 12vw, 170px);
+}
+
+.home-news__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 48px 24px;
+}
+
+.news-card__link {
+    display: block;
+}
+
+.news-card__link:hover {
+    opacity: 1;
+}
+
+.news-card__image {
+    aspect-ratio: 4 / 3;
+    margin-bottom: 20px;
+    overflow: hidden;
+    background: var(--quatro-light-grey);
+}
+
+.news-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 350ms ease;
+}
+
+.news-card__link:hover .news-card__image img {
+    transform: scale(1.025);
+}
+
+.news-card__date {
+    display: block;
+    margin-bottom: 9px;
+    color: var(--quatro-grey);
+    font-size: 0.75rem;
+}
+
+.news-card__title {
+    margin: 0;
+    font-size: clamp(1.25rem, 2vw, 1.7rem);
+    font-weight: 500;
+    line-height: 1.15;
+}
+
+.news-card__excerpt {
+    margin: 13px 0 0;
+    color: var(--quatro-grey);
+    font-size: 0.925rem;
+}
+
+/* Contact */
+
+.home-contact {
+    color: var(--quatro-white);
+    background: var(--quatro-black);
+    border-top: 1px solid rgb(255 255 255 / 25%);
+}
+
+.home-contact__inner {
+    padding-block: clamp(90px, 12vw, 170px);
+}
+
+.home-contact .home-section-eyebrow {
+    color: #a0a0a0;
+}
+
+.home-contact h2 {
+    max-width: 1000px;
+    margin: 0;
+    font-size: clamp(3rem, 8vw, 8rem);
+    font-weight: 500;
+    letter-spacing: -0.055em;
+    line-height: 0.92;
+}
+
+.home-contact__link {
+    display: inline-block;
+    margin-top: 48px;
+    font-size: 1rem;
+    text-decoration: underline;
+    text-underline-offset: 6px;
+}
+
+/* Responsive de l’accueil */
+
+@media (max-width: 850px) {
+    .home-introduction,
+    .home-expertises__inner {
+        grid-template-columns: 1fr;
+    }
+
+    .home-section-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .home-news__grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .home-hero {
+        min-height: 70vh;
+    }
+
+    .home-hero__content {
+        padding-block: 36px;
+    }
+
+    .home-projects .projects-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .news-card__image img {
+        transition: none;
+    }
+}
