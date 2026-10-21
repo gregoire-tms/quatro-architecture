@@ -44,6 +44,7 @@ function quatro_register_post_types(): void
             'thumbnail',
             'revisions',
             'page-attributes',
+            'custom-fields',
         ],
     ]);
 }

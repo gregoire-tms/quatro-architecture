@@ -13,6 +13,7 @@ define('QUATRO_CORE_PATH', plugin_dir_path(__FILE__));
 
 require_once QUATRO_CORE_PATH . 'includes/post-types.php';
 require_once QUATRO_CORE_PATH . 'includes/taxonomies.php';
+require_once QUATRO_CORE_PATH . 'includes/meta-fields.php';
 
 /**
  * À l’activation, enregistre les contenus puis régénère les URL.
