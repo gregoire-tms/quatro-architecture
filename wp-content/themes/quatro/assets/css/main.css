@@ -1020,3 +1020,122 @@ select:focus-visible {
         transition: none;
     }
 }
+
+/* --------------------------------------------------------------
+   Pages éditoriales
+-------------------------------------------------------------- */
+
+.q-container {
+	width: min(calc(100% - 40px), 1240px);
+	margin-inline: auto;
+}
+
+.q-container--narrow {
+	max-width: 920px;
+}
+
+.q-page__header {
+	padding: clamp(7rem, 12vw, 11rem) 0 clamp(2.5rem, 5vw, 4.5rem);
+	border-bottom: 1px solid #d9d9d9;
+}
+
+.q-page__kicker {
+	margin: 0 0 1rem;
+	color: #666;
+	font-size: 0.75rem;
+	font-weight: 600;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+}
+
+.q-page__title {
+	max-width: 900px;
+	margin: 0;
+	font-size: clamp(2.75rem, 7vw, 6.5rem);
+	font-weight: 400;
+	letter-spacing: -0.045em;
+	line-height: 0.95;
+}
+
+.q-page__cover {
+	margin-top: clamp(2rem, 5vw, 5rem);
+}
+
+.q-page__cover-image {
+	display: block;
+	width: 100%;
+	max-height: 780px;
+	object-fit: cover;
+}
+
+.q-page__cover-caption {
+	margin-top: 0.75rem;
+	color: #666;
+	font-size: 0.75rem;
+	line-height: 1.4;
+}
+
+.q-page__content {
+	padding-block: clamp(4rem, 8vw, 8rem);
+}
+
+.q-page__content > * {
+	width: min(calc(100% - 40px), 760px);
+	margin-inline: auto;
+}
+
+.q-page__content > * + * {
+	margin-top: 1.5rem;
+}
+
+.q-page__content > h2,
+.q-page__content > h3 {
+	margin-top: clamp(3rem, 7vw, 6rem);
+}
+
+.q-page__content > .alignwide {
+	width: min(calc(100% - 40px), 1240px);
+	max-width: 1240px;
+}
+
+.q-page__content > .alignfull {
+	width: 100%;
+	max-width: none;
+}
+
+.q-page__content p {
+	line-height: 1.7;
+}
+
+.q-page__content h2 {
+	font-size: clamp(2rem, 4vw, 4rem);
+	font-weight: 400;
+	letter-spacing: -0.035em;
+	line-height: 1.05;
+}
+
+.q-page__content h3 {
+	font-size: clamp(1.35rem, 2vw, 2rem);
+	font-weight: 500;
+	line-height: 1.2;
+}
+
+.q-page__content img {
+	height: auto;
+}
+
+@media (max-width: 782px) {
+	.q-container,
+	.q-page__content > *,
+	.q-page__content > .alignwide {
+		width: min(calc(100% - 32px), 1240px);
+	}
+
+	.q-page__header {
+		padding-top: 7rem;
+	}
+
+	.q-page__title {
+		font-size: clamp(2.5rem, 14vw, 4.5rem);
+	}
+}

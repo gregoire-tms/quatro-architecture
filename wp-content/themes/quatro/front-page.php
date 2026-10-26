@@ -143,7 +143,7 @@ while (have_posts()) :
                             Portfolio
                         </p>
 
-                        <h2>Projets sélectionnés</h2>
+                        <h2>Projets</h2>
                     </div>
 
                     <a

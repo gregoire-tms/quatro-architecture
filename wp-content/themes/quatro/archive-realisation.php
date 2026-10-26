@@ -59,8 +59,7 @@ $filters_are_active = (
     </h1>
 
     <p class="projects-archive-introduction">
-        Découvrez les projets réalisés et accompagnés par
-        QuAtro Architecture.
+        Découvrez les projets réalisés parQuAtro Architecture.
     </p>
 
 </header>
@@ -70,11 +69,10 @@ $filters_are_active = (
     <form
         class="project-filters"
         action="<?php echo esc_url(
-            get_post_type_archive_link('realisation')
-        ); ?>"
+                    get_post_type_archive_link('realisation')
+                ); ?>"
         method="get"
-        aria-label="Filtrer les réalisations"
-    >
+        aria-label="Filtrer les réalisations">
 
         <div class="project-filters__grid">
 
@@ -88,8 +86,7 @@ $filters_are_active = (
                     name="recherche"
                     type="search"
                     value="<?php echo esc_attr($search_query); ?>"
-                    placeholder="Nom d’un projet"
-                >
+                    placeholder="Nom d’un projet">
             </div>
 
             <div class="project-filter-field">
@@ -99,8 +96,7 @@ $filters_are_active = (
 
                 <select
                     id="projects-typology"
-                    name="filtre_typologie"
-                >
+                    name="filtre_typologie">
                     <option value="">
                         Toutes les typologies
                     </option>
@@ -115,13 +111,12 @@ $filters_are_active = (
 
                             <option
                                 value="<?php echo esc_attr(
-                                    $typology->slug
-                                ); ?>"
+                                            $typology->slug
+                                        ); ?>"
                                 <?php selected(
                                     $selected_typology,
                                     $typology->slug
-                                ); ?>
-                            >
+                                ); ?>>
                                 <?php echo esc_html(
                                     $typology->name
                                 ); ?>
@@ -140,8 +135,7 @@ $filters_are_active = (
 
                 <select
                     id="projects-speciality"
-                    name="filtre_specialite"
-                >
+                    name="filtre_specialite">
                     <option value="">
                         Toutes les spécialités
                     </option>
@@ -156,13 +150,12 @@ $filters_are_active = (
 
                             <option
                                 value="<?php echo esc_attr(
-                                    $speciality->slug
-                                ); ?>"
+                                            $speciality->slug
+                                        ); ?>"
                                 <?php selected(
                                     $selected_speciality,
                                     $speciality->slug
-                                ); ?>
-                            >
+                                ); ?>>
                                 <?php echo esc_html(
                                     $speciality->name
                                 ); ?>
@@ -181,8 +174,7 @@ $filters_are_active = (
 
                 <select
                     id="projects-status"
-                    name="filtre_statut"
-                >
+                    name="filtre_statut">
                     <option value="">
                         Tous les statuts
                     </option>
@@ -196,8 +188,7 @@ $filters_are_active = (
                             <?php selected(
                                 $selected_status,
                                 $value
-                            ); ?>
-                        >
+                            ); ?>>
                             <?php echo esc_html($label); ?>
                         </option>
 
@@ -211,8 +202,7 @@ $filters_are_active = (
 
             <button
                 class="project-filters__submit"
-                type="submit"
-            >
+                type="submit">
                 Appliquer les filtres
             </button>
 
@@ -221,11 +211,10 @@ $filters_are_active = (
                 <a
                     class="project-filters__reset"
                     href="<?php echo esc_url(
-                        get_post_type_archive_link(
-                            'realisation'
-                        )
-                    ); ?>"
-                >
+                                get_post_type_archive_link(
+                                    'realisation'
+                                )
+                            ); ?>">
                     Réinitialiser
                 </a>
 
@@ -305,11 +294,10 @@ $filters_are_active = (
 
                 <a
                     href="<?php echo esc_url(
-                        get_post_type_archive_link(
-                            'realisation'
-                        )
-                    ); ?>"
-                >
+                                get_post_type_archive_link(
+                                    'realisation'
+                                )
+                            ); ?>">
                     Voir toutes les réalisations
                 </a>
             </div>
