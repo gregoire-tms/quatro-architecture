@@ -33,7 +33,7 @@ body {
 
 img {
     display: block;
-    max-width: 80%;
+    max-width: 100%;
     height: auto;
 }
 
@@ -705,76 +705,67 @@ select:focus-visible {
     }
 }
 
-/* Page d’accueil */
+/* Page d’accueil : priorité aux réalisations */
 
-.home-hero {
-    position: relative;
-    display: flex;
-    align-items: flex-end;
-    min-height: clamp(560px, 78vh, 900px);
-    overflow: hidden;
-    color: var(--quatro-white);
-    background: var(--quatro-black);
+/* En-tête plus compact uniquement sur la page d’accueil. */
+.home .site-header__inner {
+    min-height: 80px;
+    gap: 24px;
 }
 
-.home-hero__media,
-.home-hero__overlay {
-    position: absolute;
-    inset: 0;
+/* Projets sélectionnés : premier contenu sous la navigation. */
+.home-projects {
+    padding-block: 24px clamp(48px, 6vw, 88px);
+    background: var(--quatro-white);
+    border-bottom: 1px solid var(--quatro-border);
 }
 
-.home-hero__image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.home-projects__heading {
+    margin-bottom: 24px;
 }
 
-.home-hero__placeholder {
-    width: 100%;
-    height: 100%;
-    background:
-        linear-gradient(
-            135deg,
-            #555,
-            #161616
-        );
-}
-
-.home-hero__overlay {
-    background:
-        linear-gradient(
-            to top,
-            rgb(0 0 0 / 65%) 0%,
-            rgb(0 0 0 / 10%) 65%,
-            rgb(0 0 0 / 5%) 100%
-        );
-}
-
-.home-hero__content {
-    position: relative;
-    z-index: 1;
-    padding-block: 56px;
-}
-
-.home-hero__title {
-    max-width: 1200px;
+.home-projects__title {
     margin: 0;
-    font-size: clamp(3rem, 8vw, 8rem);
-    font-weight: 500;
-    letter-spacing: -0.06em;
-    line-height: 0.9;
+    color: var(--quatro-grey);
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 1.4;
 }
 
-.home-hero__description {
-    max-width: 600px;
-    margin: 28px 0 0;
-    font-size: clamp(1rem, 2vw, 1.35rem);
+/* L’archive conserve sa grille à trois colonnes. */
+.home-projects .projects-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(36px, 4vw, 64px) 24px;
+}
+
+.home-projects .project-card {
+    min-width: 0;
+}
+
+.home-projects .project-card__image {
+    background: var(--quatro-light-grey);
+}
+
+.home-projects .project-card__title {
+    overflow-wrap: anywhere;
+}
+
+.home-projects__footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: clamp(32px, 4vw, 56px);
+}
+
+.home-projects__empty {
+    margin: 0;
+    color: var(--quatro-grey);
 }
 
 /* Titres de section */
 
 .home-section-eyebrow {
-    margin: 0 0 16px;
+    margin: 0 0 12px;
     color: var(--quatro-grey);
     font-size: 0.75rem;
     font-weight: 600;
@@ -785,18 +776,18 @@ select:focus-visible {
 .home-section-heading h2,
 .home-section-header h2 {
     margin: 0;
-    font-size: clamp(2.2rem, 5vw, 5rem);
+    font-size: clamp(1.8rem, 3.5vw, 3.25rem);
     font-weight: 500;
     letter-spacing: -0.045em;
-    line-height: 0.95;
+    line-height: 1.05;
 }
 
 .home-section-header {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    gap: 40px;
-    margin-bottom: 48px;
+    gap: 24px;
+    margin-bottom: 32px;
 }
 
 .text-link {
@@ -811,15 +802,20 @@ select:focus-visible {
 .home-introduction {
     display: grid;
     grid-template-columns: minmax(200px, 0.8fr) minmax(0, 1.8fr);
-    gap: clamp(60px, 10vw, 180px);
-    padding-block: clamp(90px, 12vw, 180px);
+    gap: clamp(32px, 7vw, 112px);
+    padding-block: clamp(56px, 7vw, 104px);
+}
+
+.home-introduction__main {
+    min-width: 0;
 }
 
 .home-introduction__content {
     max-width: 850px;
-    font-size: clamp(1.4rem, 2.6vw, 2.4rem);
+    font-size: clamp(1.15rem, 2vw, 1.75rem);
     letter-spacing: -0.025em;
-    line-height: 1.35;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
 }
 
 .home-introduction__content > *:first-child {
@@ -831,18 +827,7 @@ select:focus-visible {
 }
 
 .home-introduction__main .text-link {
-    margin-top: 40px;
-}
-
-/* Projets sélectionnés */
-
-.home-projects {
-    padding-block: clamp(80px, 10vw, 150px);
-    background: var(--quatro-light-grey);
-}
-
-.home-projects .project-card__image {
-    background: var(--quatro-white);
+    margin-top: 24px;
 }
 
 /* Expertises */
@@ -855,8 +840,8 @@ select:focus-visible {
 .home-expertises__inner {
     display: grid;
     grid-template-columns: minmax(200px, 0.8fr) minmax(0, 1.8fr);
-    gap: clamp(60px, 10vw, 180px);
-    padding-block: clamp(90px, 12vw, 170px);
+    gap: clamp(32px, 7vw, 112px);
+    padding-block: clamp(56px, 7vw, 104px);
 }
 
 .home-expertises .home-section-eyebrow {
@@ -883,8 +868,8 @@ select:focus-visible {
     align-items: center;
     justify-content: space-between;
     gap: 20px;
-    padding-block: 24px;
-    font-size: clamp(1.35rem, 2.5vw, 2.2rem);
+    padding-block: 20px;
+    font-size: clamp(1.2rem, 2vw, 1.75rem);
 }
 
 .home-expertises__list a:hover {
@@ -895,7 +880,7 @@ select:focus-visible {
 /* Actualités */
 
 .home-news {
-    padding-block: clamp(90px, 12vw, 170px);
+    padding-block: clamp(56px, 7vw, 104px);
 }
 
 .home-news__grid {
@@ -959,7 +944,7 @@ select:focus-visible {
 }
 
 .home-contact__inner {
-    padding-block: clamp(90px, 12vw, 170px);
+    padding-block: clamp(56px, 7vw, 104px);
 }
 
 .home-contact .home-section-eyebrow {
@@ -969,21 +954,33 @@ select:focus-visible {
 .home-contact h2 {
     max-width: 1000px;
     margin: 0;
-    font-size: clamp(3rem, 8vw, 8rem);
+    font-size: clamp(2rem, 4.5vw, 4.25rem);
     font-weight: 500;
     letter-spacing: -0.055em;
-    line-height: 0.92;
+    line-height: 1.05;
 }
 
 .home-contact__link {
     display: inline-block;
-    margin-top: 48px;
+    margin-top: 28px;
     font-size: 1rem;
     text-decoration: underline;
     text-underline-offset: 6px;
 }
 
+/* Éviter une bande blanche entre le contact et le pied de page. */
+.home .site-footer {
+    margin-top: 0;
+}
+
 /* Responsive de l’accueil */
+
+@media (max-width: 900px) {
+    .home .site-header__inner {
+        gap: 16px;
+        padding-block: 18px;
+    }
+}
 
 @media (max-width: 850px) {
     .home-introduction,
@@ -1001,17 +998,13 @@ select:focus-visible {
     }
 }
 
-@media (max-width: 600px) {
-    .home-hero {
-        min-height: 70vh;
-    }
-
-    .home-hero__content {
-        padding-block: 36px;
-    }
-
+@media (max-width: 650px) {
     .home-projects .projects-grid {
         grid-template-columns: 1fr;
+    }
+
+    .home-projects__footer {
+        justify-content: flex-start;
     }
 }
 
