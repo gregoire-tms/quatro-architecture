@@ -67,13 +67,31 @@ function quatro_enqueue_assets(): void
             ? (string) filemtime($main_css_path)
             : $theme_version
     );
+
+    if (is_page('contact') || is_page_template('page-contact.php')) {
+        wp_enqueue_style(
+            'quatro-contact',
+            get_template_directory_uri() . '/assets/css/contact.css',
+            ['quatro-main'],
+            (string) filemtime(get_template_directory() . '/assets/css/contact.css')
+        );
+    }
 }
 add_action('wp_enqueue_scripts', 'quatro_enqueue_assets');
 
+function quatro_contact_body_class(array $classes): array
+{
+    if (is_page('contact') || is_page_template('page-contact.php')) {
+        $classes[] = 'page-contact';
+    }
+
+    return $classes;
+}
+add_filter('body_class', 'quatro_contact_body_class');
+
 /**
  * Récupère et nettoie une valeur envoyée dans l’URL.
- */
-function quatro_get_archive_filter(string $key): string
+ */function quatro_get_archive_filter(string $key): string
 {
     if (
         !isset($_GET[$key]) ||

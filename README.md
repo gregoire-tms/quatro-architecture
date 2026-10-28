@@ -35,6 +35,14 @@ Les fonctionnalités métier sont regroupées dans le plugin ; le thème gère l
 
 Le dépôt contient le code spécifique au projet, pas une installation WordPress complète. La base de données et les médias doivent être restaurés séparément, ou remplacés par des contenus de test.
 
+### Page Contact
+
+Créer une page avec le slug `contact`, ou choisir le modèle **Contact** dans l’éditeur de page. Le texte ajouté dans l’éditeur apparaît sous les coordonnées directes.
+
+Les coordonnées des trois agences, le téléphone et l’adresse de réception du formulaire sont modifiables dans **Réglages → Contact QuAtro**. Les valeurs initiales reprennent celles du site actuel et doivent être confirmées avant la mise en ligne.
+
+Le formulaire utilise `wp_mail` : vérifier l’acheminement des e-mails sur l’hébergement de destination. Il valide les champs côté serveur, protège les soumissions par nonce, comporte un champ antispam invisible et limite les tentatives à trois par adresse IP sur cinq minutes. Les messages ne sont pas enregistrés dans la base de données. Une page de confidentialité publiée et définie dans les réglages WordPress est automatiquement liée au formulaire.
+
 ## Versionnement et sauvegardes
 
 - Vérifier les modifications avant chaque commit, puis les envoyer sur GitHub avec `git push`.
