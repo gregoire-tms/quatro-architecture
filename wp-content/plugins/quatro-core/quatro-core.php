@@ -3,7 +3,7 @@
  * Plugin Name: QuAtro Core
  * Description: Gestion des contenus spécifiques du site QuAtro Architecture.
  * Version: 1.0.0
- * Author: Lucas Finez
+ * Author: Grégoire THOMAS
  * Text Domain: quatro-core
  */
 
