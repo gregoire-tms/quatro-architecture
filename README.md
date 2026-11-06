@@ -19,29 +19,40 @@ Les fonctionnalités métier sont regroupées dans le plugin ; le thème gère l
 
 ## Fonctionnalités principales
 
-- Accueil centré sur une sélection de réalisations.
+- Accueil consacré aux actualités, avec pagination.
 - Catalogue de projets avec recherche et filtres.
 - Fiches détaillées des réalisations et galeries d’images.
 - Actualités gérées avec les articles WordPress.
 - Pages éditoriales modifiables avec Gutenberg.
+- Contact direct par e-mail et téléphone, avec les adresses des trois agences.
 
 ## Installation locale
 
 1. Créer une installation WordPress dans LocalWP.
 2. Copier le thème `quatro` et le plugin `quatro-core` dans les dossiers WordPress correspondants.
 3. Activer le plugin **QuAtro Core**, puis le thème **QuAtro Architecture**.
-4. Créer ou restaurer les pages et les contenus. Dans **Réglages → Lecture**, définir **Accueil** comme page d’accueil et **Actualités** comme page des articles.
-5. Configurer le menu principal, puis enregistrer les réglages dans **Réglages → Permaliens**.
+4. Créer ou restaurer les contenus et la page **Contact**. Dans **Réglages → Lecture**, choisir **Les derniers articles** pour la page d’accueil. Les actualités se rédigent dans **Articles**.
+5. Configurer les menus avec **Actualités** (lien vers la racine du site), **Réalisations** et **Contact**, puis enregistrer les réglages dans **Réglages → Permaliens**.
 
 Le dépôt contient le code spécifique au projet, pas une installation WordPress complète. La base de données et les médias doivent être restaurés séparément, ou remplacés par des contenus de test.
 
 ### Page Contact
 
-Créer une page avec le slug `contact`, ou choisir le modèle **Contact** dans l’éditeur de page. Le texte ajouté dans l’éditeur apparaît sous les coordonnées directes.
+Créer une page avec le slug `contact`, ou choisir le modèle **Contact** dans l’éditeur de page. Le texte ajouté dans l’éditeur apparaît sous les coordonnées directes et peut accueillir une présentation de l’agence.
 
-Les coordonnées des trois agences, le téléphone et l’adresse de réception du formulaire sont modifiables dans **Réglages → Contact QuAtro**. Les valeurs initiales reprennent celles du site actuel et doivent être confirmées avant la mise en ligne.
+Les coordonnées des trois agences, le téléphone et l’e-mail sont modifiables dans **Réglages → Contact QuAtro**. Les valeurs initiales reprennent celles du site actuel et doivent être confirmées avant la mise en ligne.
 
-Le formulaire utilise `wp_mail` : vérifier l’acheminement des e-mails sur l’hébergement de destination. Il valide les champs côté serveur, protège les soumissions par nonce, comporte un champ antispam invisible et limite les tentatives à trois par adresse IP sur cinq minutes. Les messages ne sont pas enregistrés dans la base de données. Une page de confidentialité publiée et définie dans les réglages WordPress est automatiquement liée au formulaire.
+La prise de contact se fait directement par e-mail ou par téléphone. La page ne comporte pas de formulaire ; le site ne traite aucun envoi de message.
+
+### Récupérer la mise à jour dans LocalWP
+
+1. Depuis le dossier `app/public` du site, récupérer le code avec `git pull --ff-only origin master`. Si Git signale des modifications locales, les conserver dans un commit avant de relancer la commande.
+2. Ouvrir **l’administration WordPress avec un compte administrateur**. Le plugin actif **QuAtro Core** applique alors une seule fois la nouvelle structure : accueil sur les derniers articles, lien **Actualités** vers la racine, retrait d’**Accueil** et d’**Agence** des menus principal et de pied de page.
+3. Actualiser le site. Les anciennes pages **Accueil**, **Actualités** et **Agence** sont conservées en brouillon, avec leurs contenus. Les anciens liens d’accueil et d’actualités sont redirigés vers le fil d’actualités ; celui d’Agence est temporairement redirigé vers Contact.
+
+Cette mise à jour est enregistrée dans l’option `quatro_site_structure_version`. Les visites suivantes de l’administration ne réappliquent pas les réglages. Pour rétablir Agence plus tard, republier la page et la remettre au menu : la redirection temporaire cesse automatiquement.
+
+Git transporte les fichiers. La connexion à l’administration déclenche la mise à jour de la base de données propre à chaque installation ; aucune base ni aucun média n’est transféré par `git pull`.
 
 ## Versionnement et sauvegardes
 
