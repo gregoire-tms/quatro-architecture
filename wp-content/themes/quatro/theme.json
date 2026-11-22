@@ -16,8 +16,8 @@
             "palette": [
                 {
                     "slug": "black",
-                    "name": "Noir",
-                    "color": "#151515"
+                    "name": "Encre",
+                    "color": "#141414"
                 },
                 {
                     "slug": "white",
@@ -27,12 +27,17 @@
                 {
                     "slug": "grey",
                     "name": "Gris",
-                    "color": "#6d6d6d"
+                    "color": "#6b6b6b"
                 },
                 {
                     "slug": "light-grey",
-                    "name": "Gris clair",
-                    "color": "#f3f3f0"
+                    "name": "Pierre",
+                    "color": "#f2f2ef"
+                },
+                {
+                    "slug": "lime",
+                    "name": "Vert QuAtro",
+                    "color": "#cbd401"
                 }
             ]
         },
@@ -51,8 +56,19 @@
             "fontFamilies": [
                 {
                     "slug": "sans",
-                    "name": "Sans système",
-                    "fontFamily": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Helvetica, Arial, sans-serif"
+                    "name": "Hanken Grotesk",
+                    "fontFamily": "\"Hanken Grotesk\", \"Helvetica Neue\", Helvetica, Arial, sans-serif",
+                    "fontFace": [
+                        {
+                            "fontFamily": "Hanken Grotesk",
+                            "fontStyle": "normal",
+                            "fontWeight": "100 900",
+                            "fontDisplay": "swap",
+                            "src": [
+                                "file:./assets/fonts/hanken-grotesk-latin-wght.woff2"
+                            ]
+                        }
+                    ]
                 }
             ],
             "fontSizes": [
@@ -64,12 +80,12 @@
                 {
                     "slug": "normal",
                     "name": "Normal",
-                    "size": "1rem"
+                    "size": "1.0625rem"
                 },
                 {
                     "slug": "large",
                     "name": "Grand",
-                    "size": "1.5rem"
+                    "size": "1.75rem"
                 }
             ]
         }
@@ -86,12 +102,12 @@
             "fontFamily": "var(--wp--preset--font-family--sans)",
             "fontSize": "var(--wp--preset--font-size--normal)",
             "fontWeight": "400",
-            "lineHeight": "1.6"
+            "lineHeight": "1.65"
         },
         "elements": {
             "heading": {
                 "typography": {
-                    "fontWeight": "500",
+                    "fontWeight": "300",
                     "lineHeight": "1.1"
                 }
             },

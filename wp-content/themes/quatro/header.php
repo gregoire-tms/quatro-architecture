@@ -8,6 +8,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1"
     >
+    <script>document.documentElement.classList.add('js');</script>
 
     <?php wp_head(); ?>
 </head>
@@ -24,25 +25,23 @@
     <div class="site-header__inner container-wide">
 
         <div class="site-branding">
-            <?php if (has_custom_logo()) : ?>
-
-                <?php the_custom_logo(); ?>
-
-            <?php else : ?>
-
-                <a
-                    class="site-branding__name"
-                    href="<?php echo esc_url(home_url('/')); ?>"
-                >
-                    <?php bloginfo('name'); ?>
-                </a>
-
-            <?php endif; ?>
+            <?php quatro_the_logo(); ?>
         </div>
 
         <?php if (has_nav_menu('primary')) : ?>
 
+            <button
+                class="menu-toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="site-navigation"
+            >
+                <span class="menu-toggle__label">Menu</span>
+                <span class="menu-toggle__icon" aria-hidden="true"></span>
+            </button>
+
             <nav
+                id="site-navigation"
                 class="site-navigation"
                 aria-label="Navigation principale"
             >

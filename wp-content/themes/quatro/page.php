@@ -5,71 +5,49 @@
  * @package Quatro
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined('ABSPATH') || exit;
 
 get_header();
-?>
 
-<main id="primary" class="site-main">
+while (have_posts()) :
+    the_post();
+    ?>
 
-	<?php while ( have_posts() ) : ?>
-		<?php the_post(); ?>
+    <article id="post-<?php the_ID(); ?>" <?php post_class('q-page'); ?>>
 
-		<article id="post-<?php the_ID(); ?>" <?php post_class( 'q-page' ); ?>>
+        <header class="q-hero container-wide">
+            <h1 class="q-hero__title"><?php the_title(); ?></h1>
+        </header>
 
-			<header class="q-page__header">
-				<div class="q-container q-container--narrow">
-					<p class="q-page__kicker">
-						<?php echo esc_html( get_bloginfo( 'name' ) ); ?>
-					</p>
+        <?php if (has_post_thumbnail()) : ?>
+            <figure class="q-cover container-wide">
+                <?php
+                the_post_thumbnail('quatro-project-large', [
+                    'loading'       => 'eager',
+                    'fetchpriority' => 'high',
+                    'sizes'         => '(max-width: 1488px) calc(100vw - 48px), 1440px',
+                ]);
+                ?>
+                <?php if (get_the_post_thumbnail_caption()) : ?>
+                    <figcaption><?php echo wp_kses_post(get_the_post_thumbnail_caption()); ?></figcaption>
+                <?php endif; ?>
+            </figure>
+        <?php endif; ?>
 
-					<h1 class="q-page__title">
-						<?php the_title(); ?>
-					</h1>
-				</div>
-			</header>
+        <div class="q-prose entry-content">
+            <?php the_content(); ?>
 
-			<?php if ( has_post_thumbnail() ) : ?>
-				<figure class="q-page__cover q-container">
-					<?php
-					the_post_thumbnail(
-						'full',
-						array(
-							'class'         => 'q-page__cover-image',
-							'loading'       => 'eager',
-							'fetchpriority' => 'high',
-						)
-					);
-					?>
+            <?php
+            wp_link_pages([
+                'before' => '<nav class="q-page__pagination">',
+                'after'  => '</nav>',
+            ]);
+            ?>
+        </div>
 
-					<?php if ( get_the_post_thumbnail_caption() ) : ?>
-						<figcaption class="q-page__cover-caption">
-							<?php echo wp_kses_post( get_the_post_thumbnail_caption() ); ?>
-						</figcaption>
-					<?php endif; ?>
-				</figure>
-			<?php endif; ?>
+    </article>
 
-			<div class="q-page__content">
-				<?php the_content(); ?>
+    <?php
+endwhile;
 
-				<?php
-				wp_link_pages(
-					array(
-						'before' => '<nav class="q-page__pagination">',
-						'after'  => '</nav>',
-					)
-				);
-				?>
-			</div>
-
-		</article>
-
-	<?php endwhile; ?>
-
-</main>
-
-<?php
 get_footer();

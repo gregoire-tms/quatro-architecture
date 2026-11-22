@@ -1,6 +1,6 @@
 /* Page Contact : typographie, espace et coordonnées avant tout. */
 .q-contact {
-    --contact-accent: #dbdc2b;
+    --contact-accent: var(--q-lime);
 }
 
 .q-contact__header {
@@ -36,13 +36,20 @@
 .q-contact__heading h1 {
     margin: 0;
     font-size: clamp(3rem, 6.5vw, 6.5rem);
-    font-weight: 400;
+    font-weight: 200;
     letter-spacing: -.06em;
     line-height: 1;
 }
 
+/* Le point final devient le carré vert des autres titres. */
 .q-contact__dot {
-    color: #747500;
+    display: inline-block;
+    width: 0.13em;
+    height: 0.13em;
+    margin-left: 0.08em;
+    overflow: hidden;
+    color: transparent;
+    background: var(--q-lime);
 }
 
 .q-contact__heading > p {
@@ -66,7 +73,7 @@
 .q-contact__direct h2 {
     margin: 0 0 16px;
     font-size: clamp(1.5rem, 2.5vw, 2rem);
-    font-weight: 400;
+    font-weight: 300;
     letter-spacing: -.035em;
     line-height: 1.2;
 }
@@ -120,7 +127,7 @@
 
 .q-contact__offices {
     padding-block: clamp(48px, 7vw, 88px);
-    background: var(--quatro-light-grey);
+    border-top: 1px solid var(--q-ink);
 }
 
 .q-contact__offices-heading {
@@ -134,7 +141,7 @@
 .q-contact__offices-heading h2 {
     margin: 0;
     font-size: clamp(2rem, 4vw, 3.5rem);
-    font-weight: 400;
+    font-weight: 200;
     letter-spacing: -.05em;
     line-height: 1.1;
 }
@@ -161,7 +168,7 @@
     justify-content: space-between;
     margin: 0 0 24px;
     font-size: 1.5rem;
-    font-weight: 400;
+    font-weight: 300;
     letter-spacing: -.03em;
 }
 
