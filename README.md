@@ -2,7 +2,7 @@
 
 Refonte du site vitrine de [QuAtro Architecture](https://www.quatroarchitecture.fr/) sous WordPress, en remplacement du site existant sous KiwiBO.
 
-L’objectif est de conserver une identité sobre et de mettre les réalisations de l’agence au premier plan, tout en facilitant la gestion des contenus.
+L’objectif est de conserver une identité sobre et de mettre les projets de l’agence au premier plan, tout en facilitant la gestion des contenus.
 
 ## Technologies
 
@@ -13,26 +13,40 @@ L’objectif est de conserver une identité sobre et de mettre les réalisations
 ## Structure du projet
 
 - `wp-content/themes/quatro/` : thème sur mesure, gabarits et styles du site.
-- `wp-content/plugins/quatro-core/` : gestion des réalisations, des typologies, des spécialités et des champs associés.
+- `wp-content/plugins/quatro-core/` : gestion des projets, des typologies, des spécialités et des champs associés, mises à jour ponctuelles de la structure du site.
 
 Les fonctionnalités métier sont regroupées dans le plugin ; le thème gère leur présentation.
 
+Le type de contenu des projets garde sa clé technique `realisation` pour conserver les contenus existants ; le site et l’administration l’appellent **Projets**.
+
 ## Fonctionnalités principales
 
-- Accueil consacré aux actualités, avec pagination.
-- Catalogue de projets avec recherche et filtres.
-- Fiches détaillées des réalisations et galeries d’images.
-- Actualités gérées avec les articles WordPress.
+- Accueil consacré aux **News**, avec pagination.
+- Catalogue de **Projets** en grille décalée, sans filtres ni compteur.
+- Menu **Projets** déroulant : il liste automatiquement les typologies qui ont au moins un projet publié.
+- Fiches détaillées des projets et galeries d’images.
+- News gérées avec les articles WordPress, renommés **News** dans l’administration.
+- Page **Agence** : chiffres clés, historique, démarche et équipe, modifiables avec Gutenberg.
 - Pages éditoriales modifiables avec Gutenberg.
 - Contact direct par e-mail et téléphone, avec les adresses des trois agences.
+
+## Identité graphique
+
+Le site reprend le contraste du logo : des lettres fines et grises, un « A » plein et vert.
+
+- **Logo** : `assets/img/logo-quatro.png` (fond transparent), utilisé tant qu’aucun logo n’est choisi dans **Apparence → Personnaliser**. Le « A » vert sert d’icône de site (`favicon.png`, `apple-touch-icon.png`) tant qu’aucune icône n’est définie dans les réglages.
+- **Police** : Hanken Grotesk, hébergée dans le thème (`assets/fonts/`, licence SIL OFL), déclarée dans `theme.json`. Aucun appel à Google Fonts.
+- **Typographie** : grands titres très fins ponctués d’un carré vert, petites capitales espacées comme « A R C H I T E C T U R E » pour le menu et les libellés.
+- **Couleurs** : encre `#141414`, gris `#6b6b6b`, pierre `#f2f2ef` et un seul accent, le vert du logo `#cbd401`, réservé aux soulignements, repères et survols.
+- **Photos** : en noir et blanc dans les grilles de projets, en couleur au survol et sur les fiches.
 
 ## Installation locale
 
 1. Créer une installation WordPress dans LocalWP.
 2. Copier le thème `quatro` et le plugin `quatro-core` dans les dossiers WordPress correspondants.
 3. Activer le plugin **QuAtro Core**, puis le thème **QuAtro Architecture**.
-4. Créer ou restaurer les contenus et la page **Contact**. Dans **Réglages → Lecture**, choisir **Les derniers articles** pour la page d’accueil. Les actualités se rédigent dans **Articles**.
-5. Configurer les menus avec **Actualités** (lien vers la racine du site), **Réalisations** et **Contact**, puis enregistrer les réglages dans **Réglages → Permaliens**.
+4. Créer ou restaurer les contenus et la page **Contact**. Dans **Réglages → Lecture**, choisir **Les derniers articles** pour la page d’accueil. Les news se rédigent dans **News**.
+5. Ouvrir l’administration avec un compte administrateur : le plugin crée la page **Agence** et organise le menu principal en **News · Projets · Agence · Contact** (voir plus bas).
 
 Le dépôt contient le code spécifique au projet, pas une installation WordPress complète. La base de données et les médias doivent être restaurés séparément, ou remplacés par des contenus de test.
 
@@ -40,17 +54,23 @@ Le dépôt contient le code spécifique au projet, pas une installation WordPres
 
 Créer une page avec le slug `contact`, ou choisir le modèle **Contact** dans l’éditeur de page. Le texte ajouté dans l’éditeur apparaît sous les coordonnées directes et peut accueillir une présentation de l’agence.
 
-Les coordonnées des trois agences, le téléphone et l’e-mail sont modifiables dans **Réglages → Contact QuAtro**. Les valeurs initiales reprennent celles du site actuel et doivent être confirmées avant la mise en ligne.
+Les coordonnées des trois agences, le téléphone et l’e-mail sont modifiables dans **Réglages → Contact QuAtro**. Ils alimentent aussi le pied de page. Les valeurs initiales reprennent celles du site actuel et doivent être confirmées avant la mise en ligne.
 
 La prise de contact se fait directement par e-mail ou par téléphone. La page ne comporte pas de formulaire ; le site ne traite aucun envoi de message.
+
+### Page Agence
+
+La page de slug `agence` utilise automatiquement le modèle **Agence**. Son contenu initial reprend l’historique et l’équipe de l’ancien site (`wp-content/plugins/quatro-core/content/agence.html`) ; il se modifie ensuite librement dans l’éditeur. Les classes de blocs `q-statement`, `q-figures`, `q-section`, `q-timeline` et `q-team__list` donnent leur mise en forme aux différentes parties.
 
 ### Récupérer la mise à jour dans LocalWP
 
 1. Depuis le dossier `app/public` du site, récupérer le code avec `git pull --ff-only origin master`. Si Git signale des modifications locales, les conserver dans un commit avant de relancer la commande.
-2. Ouvrir **l’administration WordPress avec un compte administrateur**. Le plugin actif **QuAtro Core** applique alors une seule fois la nouvelle structure : accueil sur les derniers articles, lien **Actualités** vers la racine, retrait d’**Accueil** et d’**Agence** des menus principal et de pied de page.
-3. Actualiser le site. Les anciennes pages **Accueil**, **Actualités** et **Agence** sont conservées en brouillon, avec leurs contenus. Les anciens liens d’accueil et d’actualités sont redirigés vers le fil d’actualités ; celui d’Agence est temporairement redirigé vers Contact.
+2. Ouvrir **l’administration WordPress avec un compte administrateur**. Le plugin actif **QuAtro Core** applique alors, une seule fois, les mises à jour de structure qui manquent :
+   - **Version 1** : accueil sur les derniers articles, anciennes pages **Accueil** et **Actualités** en brouillon, avec redirection de leurs anciens liens vers l’accueil.
+   - **Version 2** : page **Agence** publiée (créée si elle n’existe pas ; un contenu déjà rédigé n’est jamais remplacé), menus principal et de pied de page réordonnés en **News · Projets · Agence · Contact**, adresses des projets passées de `/realisations/` à `/projets/` et de `/realisation/…` à `/projet/…`.
+3. Actualiser le site.
 
-Cette mise à jour est enregistrée dans l’option `quatro_site_structure_version`. Les visites suivantes de l’administration ne réappliquent pas les réglages. Pour rétablir Agence plus tard, republier la page et la remettre au menu : la redirection temporaire cesse automatiquement.
+L’étape appliquée est enregistrée dans l’option `quatro_site_structure_version`. Les visites suivantes de l’administration ne réappliquent pas les réglages.
 
 Git transporte les fichiers. La connexion à l’administration déclenche la mise à jour de la base de données propre à chaque installation ; aucune base ni aucun média n’est transféré par `git pull`.
 

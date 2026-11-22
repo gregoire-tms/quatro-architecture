@@ -3,7 +3,7 @@
 defined('ABSPATH') || exit;
 
 /**
- * Enregistre les classifications des réalisations.
+ * Enregistre les classifications des projets.
  */
 function quatro_register_taxonomies(): void
 {
@@ -27,7 +27,7 @@ function quatro_register_taxonomies(): void
         'show_admin_column' => true,
 
         'rewrite' => [
-            'slug'         => 'realisations',
+            'slug'         => 'projets',
             'with_front'   => false,
             'hierarchical' => true,
         ],

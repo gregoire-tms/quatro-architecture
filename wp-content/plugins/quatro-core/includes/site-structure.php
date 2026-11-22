@@ -1,7 +1,11 @@
 <?php
 /**
- * Mise en place ponctuelle de l’accueil Actualités et retrait de la page Agence.
- * Les contenus des anciennes pages restent disponibles en brouillon.
+ * Mises à jour ponctuelles de la structure du site, appliquées une seule fois
+ * par installation lors d’une visite de l’administration.
+ *
+ * 1. Accueil consacré aux news, anciennes pages Accueil et Actualités en brouillon.
+ * 2. Page Agence publiée, menus « News · Projets · Agence · Contact »,
+ *    URL des projets en /projets/.
  *
  * @package Quatro_Core
  */
@@ -10,13 +14,31 @@ defined('ABSPATH') || exit;
 
 function quatro_update_site_structure(): void
 {
-    if (
-        !current_user_can('manage_options') ||
-        get_template() !== 'quatro' ||
-        get_option('quatro_site_structure_version') === '1'
-    ) {
+    if (!current_user_can('manage_options') || get_template() !== 'quatro') {
         return;
     }
+
+    $version = (int) get_option('quatro_site_structure_version', 0);
+
+    if ($version < 1) {
+        if (!quatro_site_structure_v1()) {
+            return;
+        }
+        update_option('quatro_site_structure_version', '1');
+    }
+
+    if ($version < 2) {
+        if (!quatro_site_structure_v2()) {
+            return;
+        }
+        update_option('quatro_site_structure_version', '2');
+    }
+}
+add_action('admin_init', 'quatro_update_site_structure');
+
+/** Version 1 : les news deviennent l’accueil. */
+function quatro_site_structure_v1(): bool
+{
 
     $pages = get_option('quatro_previous_pages', []);
     if (!$pages) {
@@ -57,7 +79,7 @@ function quatro_update_site_structure(): void
 
             if ($is_agency || ($is_news && $has_news)) {
                 if (!wp_delete_post($item->ID, true)) {
-                    return;
+                    return false;
                 }
                 $removed[] = (int) $item->ID;
             } elseif ($is_news) {
@@ -70,7 +92,7 @@ function quatro_update_site_structure(): void
                     'menu-item-status'    => 'publish',
                 ]);
                 if (is_wp_error($result)) {
-                    return;
+                    return false;
                 }
                 $has_news = true;
             }
@@ -92,7 +114,7 @@ function quatro_update_site_structure(): void
                 'menu-item-status'   => 'publish',
             ]);
             if (is_wp_error($result)) {
-                return;
+                return false;
             }
         }
     }
@@ -105,16 +127,154 @@ function quatro_update_site_structure(): void
         if (get_post_type($page_id) === 'page' && get_post_status($page_id) === 'publish') {
             $result = wp_update_post(['ID' => $page_id, 'post_status' => 'draft'], true);
             if (is_wp_error($result)) {
-                return;
+                return false;
             }
         }
     }
 
-    update_option('quatro_site_structure_version', '1');
+    return true;
 }
-add_action('admin_init', 'quatro_update_site_structure');
 
-/** Maintenir les anciens liens ; Agence reste réactivable par une publication. */
+/** Version 2 : page Agence publiée, menus News · Projets · Agence · Contact. */
+function quatro_site_structure_v2(): bool
+{
+    // La page Agence existante (même en brouillon) est republiée ; sinon elle est créée
+    // avec les contenus de l’ancien site. Un contenu déjà rédigé n’est jamais remplacé.
+    $content_file = QUATRO_CORE_PATH . 'content/agence.html';
+    $content = is_readable($content_file) ? (string) file_get_contents($content_file) : '';
+    $agency = get_page_by_path('agence', OBJECT, 'page');
+
+    if (!$agency) {
+        $agency_id = wp_insert_post(wp_slash([
+            'post_type'    => 'page',
+            'post_status'  => 'publish',
+            'post_title'   => 'Agence',
+            'post_name'    => 'agence',
+            'post_content' => $content,
+        ]), true);
+        if (is_wp_error($agency_id)) {
+            return false;
+        }
+    } else {
+        $agency_id = (int) $agency->ID;
+        $changes = [];
+        if ($agency->post_status !== 'publish') {
+            $changes['post_status'] = 'publish';
+        }
+        if (trim($agency->post_content) === '' && $content !== '') {
+            $changes['post_content'] = $content;
+        }
+        if ($changes) {
+            $result = wp_update_post(wp_slash(['ID' => $agency_id] + $changes), true);
+            if (is_wp_error($result)) {
+                return false;
+            }
+        }
+    }
+
+    // L’ancienne redirection temporaire d’Agence vers Contact n’a plus lieu d’être.
+    $previous = get_option('quatro_previous_pages', []);
+    if (is_array($previous) && isset($previous['agency'])) {
+        unset($previous['agency']);
+        update_option('quatro_previous_pages', $previous);
+    }
+
+    $contact = get_page_by_path('contact', OBJECT, 'page');
+    $root = untrailingslashit(home_url('/'));
+    $locations = get_nav_menu_locations();
+    $menus = array_unique(array_filter([
+        $locations['primary'] ?? 0,
+        $locations['footer'] ?? 0,
+    ]));
+
+    foreach ($menus as $menu_id) {
+        $order = ['news' => null, 'projects' => null, 'agency' => null, 'contact' => null];
+        $others = [];
+
+        foreach (wp_get_nav_menu_items($menu_id) ?: [] as $item) {
+            if ((int) $item->menu_item_parent !== 0) {
+                continue;
+            }
+            $path = untrailingslashit((string) wp_parse_url($item->url, PHP_URL_PATH));
+            $page_id = $item->object === 'page' ? (int) $item->object_id : 0;
+
+            if (!$order['news'] && untrailingslashit($item->url) === $root) {
+                $order['news'] = [$item, ['menu-item-title' => 'News']];
+            } elseif (
+                !$order['projects'] &&
+                (($item->type === 'post_type_archive' && $item->object === 'realisation') || preg_match('~/(realisations?|projets)$~', $path))
+            ) {
+                $order['projects'] = [$item, [
+                    'menu-item-title'     => 'Projets',
+                    'menu-item-type'      => 'post_type_archive',
+                    'menu-item-object'    => 'realisation',
+                    'menu-item-object-id' => 0,
+                    'menu-item-url'       => '',
+                ]];
+            } elseif (!$order['agency'] && $page_id === $agency_id) {
+                $order['agency'] = [$item, []];
+            } elseif (!$order['contact'] && $contact && $page_id === (int) $contact->ID) {
+                $order['contact'] = [$item, []];
+            } else {
+                $others[] = [$item, []];
+            }
+        }
+
+        if (!$order['projects']) {
+            $order['projects'] = [null, [
+                'menu-item-title'  => 'Projets',
+                'menu-item-type'   => 'post_type_archive',
+                'menu-item-object' => 'realisation',
+            ]];
+        }
+        if (!$order['agency']) {
+            $order['agency'] = [null, [
+                'menu-item-type'      => 'post_type',
+                'menu-item-object'    => 'page',
+                'menu-item-object-id' => $agency_id,
+            ]];
+        }
+
+        $position = 0;
+        foreach (array_merge(array_values(array_filter($order)), $others) as [$item, $changes]) {
+            $args = array_merge(
+                $item ? quatro_menu_item_args($item) : ['menu-item-status' => 'publish'],
+                $changes,
+                ['menu-item-position' => ++$position]
+            );
+            $result = wp_update_nav_menu_item($menu_id, $item ? (int) $item->ID : 0, $args);
+            if (is_wp_error($result)) {
+                return false;
+            }
+        }
+    }
+
+    // Les projets passent de /realisations/ à /projets/.
+    flush_rewrite_rules(false);
+
+    return true;
+}
+
+/** Reprend tous les réglages d’un élément de menu, pour n’en modifier que certains. */
+function quatro_menu_item_args(WP_Post $item): array
+{
+    return [
+        'menu-item-object-id'   => (int) $item->object_id,
+        'menu-item-object'      => $item->object,
+        'menu-item-parent-id'   => (int) $item->menu_item_parent,
+        'menu-item-type'        => $item->type,
+        'menu-item-title'       => $item->post_title,
+        'menu-item-url'         => $item->type === 'custom' ? $item->url : '',
+        'menu-item-description' => $item->post_content,
+        'menu-item-attr-title'  => $item->post_excerpt,
+        'menu-item-target'      => $item->target,
+        'menu-item-classes'     => implode(' ', array_filter((array) $item->classes)),
+        'menu-item-xfn'         => $item->xfn,
+        'menu-item-status'      => 'publish',
+    ];
+}
+
+/** Maintenir les anciens liens des pages passées en brouillon par la version 1. */
 function quatro_redirect_previous_pages(): void
 {
     if (
@@ -130,7 +290,7 @@ function quatro_redirect_previous_pages(): void
     $requested_id = isset($_GET['page_id']) && is_string($_GET['page_id']) ? absint($_GET['page_id']) : 0;
 
     foreach ($pages as $kind => $page_id) {
-        if (!$page_id || get_post_status($page_id) !== 'draft') {
+        if (!in_array($kind, ['home', 'news'], true) || !$page_id || get_post_status($page_id) !== 'draft') {
             continue;
         }
         $page_path = untrailingslashit(rawurldecode(wp_parse_url(home_url('/' . get_page_uri($page_id)), PHP_URL_PATH)));
@@ -145,10 +305,7 @@ function quatro_redirect_previous_pages(): void
         }
 
         $destination = home_url('/');
-        if ($kind === 'agency') {
-            $contact = get_page_by_path('contact');
-            $destination = $contact ? get_permalink($contact) : home_url('/contact/');
-        } elseif ($kind === 'news') {
+        if ($kind === 'news') {
             $paged = $pagination[1] ?? (isset($_GET['paged']) && is_string($_GET['paged']) ? absint($_GET['paged']) : 1);
             if ($paged > 1) {
                 $destination = get_option('permalink_structure')
@@ -157,7 +314,7 @@ function quatro_redirect_previous_pages(): void
             }
         }
 
-        wp_safe_redirect($destination, $kind === 'agency' ? 302 : 301);
+        wp_safe_redirect($destination, 301);
         exit;
     }
 }

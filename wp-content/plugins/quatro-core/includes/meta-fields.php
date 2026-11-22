@@ -3,7 +3,7 @@
 defined('ABSPATH') || exit;
 
 /**
- * Liste des informations disponibles pour une réalisation.
+ * Liste des informations disponibles pour un projet.
  */
 function quatro_get_realisation_meta_fields(): array
 {
@@ -63,7 +63,7 @@ function quatro_get_realisation_meta_fields(): array
         '_quatro_featured' => [
             'label'          => 'Mise en avant',
             'type'           => 'checkbox',
-            'checkbox_label' => 'Afficher cette réalisation sur la page d’accueil',
+            'checkbox_label' => 'Mettre ce projet en avant',
             'description'    => 'Sélectionnez idéalement 3 ou 6 projets.',
             'wide'           => true,
         ],
