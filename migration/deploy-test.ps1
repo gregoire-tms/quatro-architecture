@@ -10,6 +10,7 @@
                     en local : le contenu du site de test est alors remplacé par celui de Local.
     -Reconfigurer : redemande les informations de l’hébergement.
     -SansEnvoi    : prépare le paquet dans un dossier temporaire sans rien envoyer.
+    -SansNavigateur : envoie sans ouvrir le navigateur ; affiche seulement l’adresse d’installation.
 
     Les informations de l’hébergement sont enregistrées dans %APPDATA%\QuatroDeploy,
     hors du dépôt. Le mot de passe y est chiffré pour ce compte Windows (DPAPI).
@@ -26,6 +27,7 @@ param(
     [switch]$Complet,
     [switch]$Reconfigurer,
     [switch]$SansEnvoi,
+    [switch]$SansNavigateur,
     [string]$ConfigFile = (Join-Path $env:APPDATA 'QuatroDeploy\config.json')
 )
 
@@ -348,19 +350,17 @@ function Split-Package([string]$ZipFile, [string]$OutDir) {
 # Envoi FTP
 # ----------------------------------------------------------------------------
 
-function Send-File($Config, [string]$Password, [string]$LocalPath, [string]$RemotePath) {
-    $credentials = ($Config.FtpUser + ':' + $Password) -replace '\\', '\\' -replace '"', '\"'
-    $curlConfig = "user = `"$credentials`""
+function Send-File($Config, [string]$CurlConfigFile, [string]$LocalPath, [string]$RemotePath) {
     $url = 'ftp://' + $Config.FtpHost + '/' + $RemotePath
 
     while ($true) {
-        $arguments = @('-sS', '--fail', '--ftp-create-dirs', '--connect-timeout', '30', '--retry', '2', '-K', '-', '-T', $LocalPath, $url)
-        if ($script:UseTls) { $arguments = @('--ssl') + $arguments }
+        $arguments = @('-sS', '--fail', '--ftp-create-dirs', '--connect-timeout', '30', '--retry', '2', '-K', $CurlConfigFile, '-T', $LocalPath, $url)
+        if ($script:UseTls) { $arguments = @('--ssl-reqd') + $arguments }
 
         $previous = $ErrorActionPreference
         $ErrorActionPreference = 'Continue'
         try {
-            $messages = $curlConfig | & $Curl @arguments 2>&1
+            $messages = & $Curl @arguments 2>&1
             $code = $LASTEXITCODE
         } finally {
             $ErrorActionPreference = $previous
@@ -438,16 +438,27 @@ try {
     }
 
     Write-Step "Envoi vers $($config.FtpHost)"
+    # Identifiants FTP passés à curl par un fichier du dossier temporaire (supprimé à la fin),
+    # jamais sur la ligne de commande. Écrit sans BOM, que curl ne sait pas lire.
+    $curlConfigFile = Join-Path $stage 'curl.conf'
+    $credentials = ($config.FtpUser + ':' + $password) -replace '\\', '\\' -replace '"', '\"'
+    [System.IO.File]::WriteAllText($curlConfigFile, "user = `"$credentials`"`n", $Utf8NoBom)
+
     $index = 0
     foreach ($part in $parts) {
         $index++
         Write-Host ('  Morceau {0}/{1}' -f $index, $parts.Count)
-        Send-File $config $password $part ($config.WebRoot + '/quatro-deploy/' + (Split-Path $part -Leaf))
+        Send-File $config $curlConfigFile $part ($config.WebRoot + '/quatro-deploy/' + (Split-Path $part -Leaf))
     }
     Write-Host "  Page d’installation"
-    Send-File $config $password $installerFile ($config.WebRoot + '/quatro-install.php')
+    Send-File $config $curlConfigFile $installerFile ($config.WebRoot + '/quatro-install.php')
 
     Write-Step 'Installation sur le serveur'
+    if ($SansNavigateur) {
+        Write-Host "  Ouvre cette adresse dans un navigateur (valable 2 heures) pour terminer l’installation :"
+        Write-Host "  $installUrl"
+        return
+    }
     Write-Host "  Une page s’ouvre dans ton navigateur : elle termine l’installation."
     Write-Host "  Attends le message « Mise à jour terminée ». Si elle ne s’ouvre pas, ouvre cette adresse (valable 2 heures) :"
     Write-Host "  $installUrl"

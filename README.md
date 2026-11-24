@@ -96,6 +96,7 @@ Le client navigue sur un site de test hébergé gratuitement chez InfinityFree p
 - Après une modification du thème ou du plugin : `powershell -ExecutionPolicy Bypass -File migration\deploy-test.ps1`
 - Après une modification des contenus (pages, projets, news, médias) : la même commande avec `-Complet`. La base du site de test est alors remplacée par celle de Local.
 - `-SansEnvoi` prépare le paquet dans un dossier temporaire sans rien envoyer.
+- `-SansNavigateur` envoie sans ouvrir le navigateur et affiche seulement l’adresse d’installation à ouvrir.
 
 ### Limites du site de test
 
