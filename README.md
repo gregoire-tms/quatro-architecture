@@ -74,6 +74,35 @@ L’étape appliquée est enregistrée dans l’option `quatro_site_structure_ve
 
 Git transporte les fichiers. La connexion à l’administration déclenche la mise à jour de la base de données propre à chaque installation ; aucune base ni aucun média n’est transféré par `git pull`.
 
+## Environnement de test (InfinityFree)
+
+Le client navigue sur un site de test hébergé gratuitement chez InfinityFree pour faire ses retours. Le site y est envoyé depuis Local avec `migration/deploy-test.ps1`, qui contourne les limites de l’hébergeur (10 Mo par fichier, 1 Mo pour les fichiers PHP et JS) : le paquet part en morceaux de 8 Mo, puis une page d’installation à usage unique le réassemble sur le serveur et se supprime.
+
+### Mise en place (une seule fois)
+
+1. Créer un compte sur InfinityFree, puis un hébergement avec un sous-domaine gratuit.
+2. Dans le panneau de l’hébergement, rubrique **MySQL Databases**, créer une base de données.
+3. Démarrer le site dans Local, puis lancer depuis le dossier `app/public` :
+
+   ```powershell
+   powershell -ExecutionPolicy Bypass -File migration\deploy-test.ps1 -Complet
+   ```
+
+   À la première utilisation, le script demande l’adresse du site, les informations FTP et MySQL du panneau, et le mot de passe de l’hébergement (le même pour FTP et MySQL). Elles sont enregistrées dans `%APPDATA%\QuatroDeploy`, hors du dépôt, avec le mot de passe chiffré pour le compte Windows. `-Reconfigurer` permet de les ressaisir.
+4. Une page s’ouvre dans le navigateur : attendre le message « Mise à jour terminée ».
+
+### Envoyer les modifications
+
+- Après une modification du thème ou du plugin : `powershell -ExecutionPolicy Bypass -File migration\deploy-test.ps1`
+- Après une modification des contenus (pages, projets, news, médias) : la même commande avec `-Complet`. La base du site de test est alors remplacée par celle de Local.
+- `-SansEnvoi` prépare le paquet dans un dossier temporaire sans rien envoyer.
+
+### Limites du site de test
+
+- Il n’est pas indexé par les moteurs de recherche.
+- Les identifiants de l’administration sont ceux du site local.
+- L’éditeur de blocs n’y fonctionne pas : InfinityFree refuse quelques fichiers JavaScript de WordPress de plus de 1 Mo. Les contenus se modifient dans Local, puis s’envoient avec `-Complet`.
+
 ## Versionnement et sauvegardes
 
 - Vérifier les modifications avant chaque commit, puis les envoyer sur GitHub avec `git push`.
